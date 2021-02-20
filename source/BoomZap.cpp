@@ -179,7 +179,7 @@ int main() {
         // glEnd();
 
         //Text
-        RenderText(shader, "BoomZap", 0, 0, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+        RenderText(shader, "BoomZap 0.4", 0, 0, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
         
         //Swap Buffer and Poll Events
         glfwSwapBuffers(window);
