@@ -79,9 +79,9 @@ public:
 
 class Enemy {
 private:
-    int health = 2;
     glfwCircle body;
 public:
+    int health = 2;
 
     Enemy(Player &bob) {
         do {
@@ -96,10 +96,10 @@ public:
         int posOrNeg;
         float randFrac = rand() / (float) RAND_MAX;
         (randFrac >= 0.5 ? posOrNeg = 1 : posOrNeg = -1);
-        body.vel[0] = posOrNeg * (0.3 + rand() / (float) RAND_MAX);
+        body.vel[0] = (posOrNeg * (0.3 + rand() / (float) RAND_MAX))*0.7;
         randFrac = rand() / (float) RAND_MAX;
         (randFrac >= 0.5 ? posOrNeg = 1 : posOrNeg = -1);
-        body.vel[1] = posOrNeg * (0.3 + rand() / (float) RAND_MAX);
+        body.vel[1] = (posOrNeg * (0.3 + rand() / (float) RAND_MAX))*0.7;
     }
 
     void reInnit(Player &bob) {
@@ -115,10 +115,10 @@ public:
         int posOrNeg;
         float randFrac = rand() / (float) RAND_MAX;
         (randFrac >= 0.5 ? posOrNeg = 1 : posOrNeg = -1);
-        body.vel[0] = posOrNeg * (0.3 + rand() / (float) RAND_MAX);
+        body.vel[0] = (posOrNeg * (0.3 + rand() / (float) RAND_MAX))*0.7;
         randFrac = rand() / (float) RAND_MAX;
         (randFrac >= 0.5 ? posOrNeg = 1 : posOrNeg = -1);
-        body.vel[1] = posOrNeg * (0.3 + rand() / (float) RAND_MAX);
+        body.vel[1] = (posOrNeg * (0.3 + rand() / (float) RAND_MAX))*0.7;
         health = 2;
         bob.score += 1;
     }
@@ -149,10 +149,10 @@ public:
             int posOrNeg;
             float randFrac = rand() / (float) RAND_MAX;
             (randFrac >= 0.5 ? posOrNeg = 1 : posOrNeg = -1);
-            body.vel[0] += posOrNeg * rand() / (float) RAND_MAX / 1000;
+            body.vel[0] += posOrNeg * rand() / (float) RAND_MAX / 100;
             randFrac = rand() / (float) RAND_MAX;
             (randFrac >= 0.5 ? posOrNeg = 1 : posOrNeg = -1);
-            body.vel[1] += posOrNeg * rand() / (float) RAND_MAX / 1000;
+            body.vel[1] += posOrNeg * rand() / (float) RAND_MAX / 100;
         } else if (bob.zapping && pow(cursorX - body.pos[0], 2) + pow(cursorY - body.pos[1], 2) <=
                                   pow(body.radius, 2) && health == 1) {
             reInnit(bob);

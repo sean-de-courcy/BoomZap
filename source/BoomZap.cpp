@@ -30,7 +30,7 @@ void installShaders();
 void RenderText(Shader &s, std::string text, float x, float y, float scale, glm::vec3 color);
 
 //Initializing
-const float PLAYER_SPEED = 1;
+const float PLAYER_SPEED = 0.7;
 int WINDOW_HEIGHT;
 int WINDOW_WIDTH;
 double dt = 0;
@@ -278,7 +278,7 @@ int main() {
                 }
 
                 //Update Colors
-                if (t2 > 1/2) {
+                if (t2 > 1.0/30) {
                     player.updateColor();
                     t2 = 0;
                 }
@@ -334,7 +334,10 @@ int main() {
             for (int i = 0; i < enemies.size() - 3; i++){
                 enemies.pop_back();
             }
-
+            for (int i = 0; i < 3; i++){
+                enemies[i].reInnit(player);
+                player.score -= 1;
+            }
             std::string scoreStr = "You scored " + std::to_string(player.score) + " points!";
             float scale = 2.0f * 1920 / WINDOW_WIDTH;
             float textPixelLength = 0;
