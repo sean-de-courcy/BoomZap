@@ -48,9 +48,9 @@ public:
         glEnd();
     }
 
-    void updatePos(void) {
-        pos[0] += vel[0];
-        pos[1] += vel[1];
+    void updatePos(float timeStep) {
+        pos[0] += vel[0] * timeStep;
+        pos[1] += vel[1] * timeStep;
     }
 };
 

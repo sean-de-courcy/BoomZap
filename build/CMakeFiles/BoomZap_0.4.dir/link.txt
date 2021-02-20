@@ -1,0 +1,1 @@
+/usr/bin/c++   -static-libgcc -static-libstdc++ -g   CMakeFiles/BoomZap_0.4.dir/source/BoomZap.cpp.o  -o BoomZap_0.4  libglad.a -lGL -lglfw3 -lX11 -lpthread -lfreetype -ldl 

@@ -15,6 +15,11 @@
 
 #include "boomZapObjects.h"
 
+//Defining
+#define MAIN_MENU 0
+#define GAME_PLAYING 1
+#define GAME_OVER 2
+
 //Prototyping
 void mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
 static void cursor_position_callback(GLFWwindow *window, double xPos, double yPos);
@@ -25,13 +30,14 @@ void installShaders();
 void RenderText(Shader &s, std::string text, float x, float y, float scale, glm::vec3 color);
 
 //Initializing
-const float PLAYER_SPEED = 0.01;
+const float PLAYER_SPEED = 1;
 int WINDOW_HEIGHT;
 int WINDOW_WIDTH;
 double dt = 0;
-double t = 0;
+double t1 = 0;
+double t2 = 0;
 unsigned int VAO, VBO;
-GLuint programID;
+unsigned short int gameState = MAIN_MENU;
 
 //Character struct
 struct Character {
@@ -182,7 +188,7 @@ int main() {
     //Run-Loop
     while (!glfwWindowShouldClose(window)) {
         //Keeping track of time
-        //auto start = clock();
+        auto start = clock();
 
         //Setup View
         float ratio;
@@ -196,87 +202,156 @@ int main() {
         //Handle User Input Main Menu
         glfwGetCursorPos(window, &xpos, &ypos);
 
-        //Text
-        std::string GameName = "BoomZap";
-        float scale = 4.0f * 1920 / WINDOW_WIDTH;
-        float textPixelLength = 0;
-        std::string::const_iterator c;
-        for (c = GameName.begin(); c != GameName.end(); c++) {
-            Character ch = Characters[*c];
-            textPixelLength += (ch.Advance >> 6) * scale;
-        }
-        RenderText(shader, GameName, static_cast<float>(WINDOW_WIDTH) / 2 - textPixelLength / 2, static_cast<float>(WINDOW_HEIGHT) * 3/5, scale, glm::vec3(1.0f, 1.0f, 1.0f));
-        
-        //Handle User Input Gameplay
-        xpos = (xpos*2/width - 1) * ratio;
-        ypos = -1*(ypos*2/height) + 1;
-
-        //Update Velocities
-        if (player.movingUp && !player.movingDown && !(player.movingLeft ^ player.movingRight)) {
-            player.body.vel[1] = PLAYER_SPEED;
-            player.body.vel[0] = 0;
-        } else if (player.movingDown && !player.movingUp && !(player.movingLeft ^ player.movingRight)) {
-            player.body.vel[1] = -1*PLAYER_SPEED;
-            player.body.vel[0] = 0;
-        } else if (player.movingLeft && !player.movingRight && !(player.movingUp ^ player.movingDown)) {
-            player.body.vel[0] = -1*PLAYER_SPEED;
-            player.body.vel[1] = 0;
-        } else if (player.movingRight && !player.movingLeft && !(player.movingUp ^ player.movingDown)) {
-            player.body.vel[0] = PLAYER_SPEED;
-            player.body.vel[1] = 0;
-        } else if (player.movingUp && player.movingRight && !(player.movingDown || player.movingLeft)) {
-            player.body.vel[0] = sqrt(pow(PLAYER_SPEED, 2) / 2);
-            player.body.vel[1] = sqrt(pow(PLAYER_SPEED, 2) / 2);
-        } else if (player.movingUp && player.movingLeft && !(player.movingDown || player.movingRight)) {
-            player.body.vel[0] = -1 * sqrt(pow(PLAYER_SPEED, 2) / 2);
-            player.body.vel[1] = sqrt(pow(PLAYER_SPEED, 2) / 2);
-        } else if (player.movingDown && player.movingRight && !(player.movingUp || player.movingLeft)) {
-            player.body.vel[0] = sqrt(pow(PLAYER_SPEED, 2) / 2);
-            player.body.vel[1] = -1 * sqrt(pow(PLAYER_SPEED, 2) / 2);
-        } else if (player.movingDown && player.movingLeft && !(player.movingUp || player.movingRight)) {
-            player.body.vel[0] = -1*sqrt(pow(PLAYER_SPEED, 2) / 2);
-            player.body.vel[1] = -1*sqrt(pow(PLAYER_SPEED, 2) / 2);
-        } else {
-            player.body.vel[0] = 0;
-            player.body.vel[1] = 0;
+        //Main Menu
+        if (gameState == MAIN_MENU) {
+            //Game name text
+            std::string GameName = "BoomZap 0.4 Alpha";
+            float scale = 3.0f * 1920 / WINDOW_WIDTH;
+            float textPixelLength = 0;
+            std::string::const_iterator c;
+            for (c = GameName.begin(); c != GameName.end(); c++) {
+                Character ch = Characters[*c];
+                textPixelLength += (ch.Advance >> 6) * scale;
+            }
+            RenderText(shader, GameName, static_cast<float>(WINDOW_WIDTH) / 2 - textPixelLength / 2, static_cast<float>(WINDOW_HEIGHT) * 3/5, scale, glm::vec3(1.0f, 1.0f, 1.0f));
+            glUseProgram(0);
+            std::string playButton = "Click to play!";
+            scale = 1.0f * 1920 / WINDOW_WIDTH;
+            textPixelLength = 0;
+            for (c = GameName.begin(); c != GameName.end(); c++) {
+                Character ch = Characters[*c];
+                textPixelLength += (ch.Advance >> 6) * scale;
+            }
+            RenderText(shader, playButton, static_cast<float>(WINDOW_WIDTH) / 2 - textPixelLength / 2, static_cast<float>(WINDOW_HEIGHT) * 2/5, scale, glm::vec3(1.0f, 1.0f, 1.0f));
+            glUseProgram(0);
         }
 
-        //Update Positions
-        player.updatePos();
-        for (int i = 0; i < enemies.size(); i++) {
-            enemies[i].updatePos();
+        //Game playing
+        if (gameState == GAME_PLAYING) {
+            //Handle User Input Gameplay
+            xpos = (xpos*2/width - 1) * ratio;
+            ypos = -1*(ypos*2/height) + 1;
+            
+            if (t1 > 1/60) {
+                //Update Velocities
+                if (player.movingUp && !player.movingDown && !(player.movingLeft ^ player.movingRight)) {
+                    player.body.vel[1] = PLAYER_SPEED;
+                    player.body.vel[0] = 0;
+                } else if (player.movingDown && !player.movingUp && !(player.movingLeft ^ player.movingRight)) {
+                    player.body.vel[1] = -1*PLAYER_SPEED;
+                    player.body.vel[0] = 0;
+                } else if (player.movingLeft && !player.movingRight && !(player.movingUp ^ player.movingDown)) {
+                    player.body.vel[0] = -1*PLAYER_SPEED;
+                    player.body.vel[1] = 0;
+                } else if (player.movingRight && !player.movingLeft && !(player.movingUp ^ player.movingDown)) {
+                    player.body.vel[0] = PLAYER_SPEED;
+                    player.body.vel[1] = 0;
+                } else if (player.movingUp && player.movingRight && !(player.movingDown || player.movingLeft)) {
+                    player.body.vel[0] = sqrt(pow(PLAYER_SPEED, 2) / 2);
+                    player.body.vel[1] = sqrt(pow(PLAYER_SPEED, 2) / 2);
+                } else if (player.movingUp && player.movingLeft && !(player.movingDown || player.movingRight)) {
+                    player.body.vel[0] = -1 * sqrt(pow(PLAYER_SPEED, 2) / 2);
+                    player.body.vel[1] = sqrt(pow(PLAYER_SPEED, 2) / 2);
+                } else if (player.movingDown && player.movingRight && !(player.movingUp || player.movingLeft)) {
+                    player.body.vel[0] = sqrt(pow(PLAYER_SPEED, 2) / 2);
+                    player.body.vel[1] = -1 * sqrt(pow(PLAYER_SPEED, 2) / 2);
+                } else if (player.movingDown && player.movingLeft && !(player.movingUp || player.movingRight)) {
+                    player.body.vel[0] = -1*sqrt(pow(PLAYER_SPEED, 2) / 2);
+                    player.body.vel[1] = -1*sqrt(pow(PLAYER_SPEED, 2) / 2);
+                } else {
+                    player.body.vel[0] = 0;
+                    player.body.vel[1] = 0;
+                }
+
+                //Update Positions
+                player.updatePos(dt);
+                for (int i = 0; i < enemies.size(); i++) {
+                    enemies[i].updatePos(dt);
+                }
+
+                //Collision Detection
+                for (int i = 0; i < enemies.size(); i++) {
+                    enemies[i].detectCollision(player, xpos, ypos, ratio);
+                }
+
+                //Update Colors
+                if (t2 > 1/2) {
+                    player.updateColor();
+                    t2 = 0;
+                }
+
+                //Draw
+                player.draw(xpos, ypos, ratio);
+                for (int i = 0; i < enemies.size(); i++) {
+                    enemies[i].draw(ratio);
+                }
+                if (player.lives >= 1) {
+                    lifeCircle1.draw(ratio);
+                }
+                if (player.lives >= 2) {
+                    lifeCircle2.draw(ratio);
+                }
+                if (player.lives == 3) {
+                    lifeCircle3.draw(ratio);
+                }
+                if (player.lives <= 0) {
+                    gameState = GAME_OVER;
+                }
+                //Score Counter
+                std::string scoreStr = std::to_string(player.score);
+                float scale = 2.0f * 1920 / WINDOW_WIDTH;
+                float textPixelLength = 0;
+                std::string::const_iterator c;
+                for (c = scoreStr.begin(); c != scoreStr.end(); c++) {
+                    Character ch = Characters[*c];
+                    textPixelLength += (ch.Advance >> 6) * scale;
+                }
+                RenderText(shader, scoreStr, static_cast<float>(WINDOW_WIDTH) - textPixelLength - 10 * 1920 / WINDOW_WIDTH, 10 * 1920 / WINDOW_WIDTH, scale, glm::vec3(1.0f, 1.0f, 1.0f));
+                glUseProgram(0);
+
+                //Create more Enemies
+                if (enemies.size() < 3 + player.score / 10) {
+                    Enemy enemy(player);
+                    enemies.push_back(enemy);
+                }
+                t1 = 0;
+            }
         }
 
-        //Collision Detection
-        for (int i = 0; i < enemies.size(); i++) {
-            enemies[i].detectCollision(player, xpos, ypos, ratio);
-        }
+        if (gameState == GAME_OVER){
+            player.lives = 3;
+            player.body.pos[0] = 0;
+            player.body.pos[1] = 0;
+            player.movingUp = false;
+            player.movingDown = false;
+            player.movingLeft = false;
+            player.movingRight = false;
+            player.booming = false;
+            player.zapping = false;
+            for (int i = 0; i < enemies.size() - 3; i++){
+                enemies.pop_back();
+            }
 
-        //Update Colors
-        player.updateColor();
-
-        //Draw
-        player.draw(xpos, ypos, ratio);
-        for (int i = 0; i < enemies.size(); i++) {
-            enemies[i].draw(ratio);
-        }
-        if (player.lives >= 1) {
-            lifeCircle1.draw(ratio);
-        }
-        if (player.lives >= 2) {
-            lifeCircle2.draw(ratio);
-        }
-        if (player.lives == 3) {
-            lifeCircle3.draw(ratio);
-        }
-        if (player.lives <= 0) {
-            break;
-        }
-
-        //Create more Enemies
-        if (enemies.size() < 3 + player.score / 10) {
-            Enemy enemy(player);
-            enemies.push_back(enemy);
+            std::string scoreStr = "You scored " + std::to_string(player.score) + " points!";
+            float scale = 2.0f * 1920 / WINDOW_WIDTH;
+            float textPixelLength = 0;
+            std::string::const_iterator c;
+            for (c = scoreStr.begin(); c != scoreStr.end(); c++) {
+                Character ch = Characters[*c];
+                textPixelLength += (ch.Advance >> 6) * scale;
+            }
+            RenderText(shader, scoreStr, static_cast<float>(WINDOW_WIDTH) / 2 - textPixelLength / 2, static_cast<float>(WINDOW_HEIGHT) / 2, scale, glm::vec3(1.0f, 1.0f, 1.0f));
+            glUseProgram(0);
+            
+            std::string spaceToContinueStr = "Press [SPACE] to return to main menu.";
+            scale = 1.0f * 1920 / WINDOW_WIDTH;
+            textPixelLength = 0;
+            for (c = spaceToContinueStr.begin(); c != spaceToContinueStr.end(); c++) {
+                Character ch = Characters[*c];
+                textPixelLength += (ch.Advance >> 6) * scale;
+            }
+            RenderText(shader, spaceToContinueStr, static_cast<float>(WINDOW_WIDTH) / 2 - textPixelLength / 2, static_cast<float>(WINDOW_HEIGHT) / 3, scale, glm::vec3(1.0f, 1.0f, 1.0f));
+            glUseProgram(0);
         }
 
         //Swap Buffer and Poll Events
@@ -284,14 +359,12 @@ int main() {
         glfwPollEvents();
 
         //Keeping track of time
-        // auto end = clock();
-        // dt = difftime(end, start) / CLOCKS_PER_SEC;
-        // t += dt;
+        auto end = clock();
+        dt = difftime(end, start) / CLOCKS_PER_SEC;
+        t1 += dt;
+        t2 += dt;
     }
     
-    //Print Score to Console
-    std::cout << "You scored " + std::to_string(player.score) + " points." << std::endl;
-
     //Close Window
     glfwTerminate();
     exit(EXIT_SUCCESS);
@@ -299,58 +372,72 @@ int main() {
 
 //Defining
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods){
-    switch (key) {
-        case GLFW_KEY_W:
-            if (action == GLFW_REPEAT || action == GLFW_PRESS) {
-                player.movingUp = true;
-            } else {
-                player.movingUp = false;
-            }
-            break;
-        case GLFW_KEY_S:
-            if (action == GLFW_PRESS || action == GLFW_REPEAT){
-                player.movingDown = true;
-            } else {
-                player.movingDown = false;
-            }
-            break;
-        case GLFW_KEY_A:
-            if (action == GLFW_PRESS || action == GLFW_REPEAT){
-                player.movingLeft = true;
-            } else {
-                player.movingLeft = false;
-            }
-            break;
-        case GLFW_KEY_D:
-            if (action == GLFW_PRESS || action == GLFW_REPEAT){
-                player.movingRight = true;
-            } else {
-                player.movingRight = false;
-            }
-            break;
-        default:
-            break;
+    if (gameState == GAME_PLAYING){
+        switch (key) {
+            case GLFW_KEY_W:
+                if (action == GLFW_REPEAT || action == GLFW_PRESS) {
+                    player.movingUp = true;
+                } else {
+                    player.movingUp = false;
+                }
+                break;
+            case GLFW_KEY_S:
+                if (action == GLFW_PRESS || action == GLFW_REPEAT){
+                    player.movingDown = true;
+                } else {
+                    player.movingDown = false;
+                }
+                break;
+            case GLFW_KEY_A:
+                if (action == GLFW_PRESS || action == GLFW_REPEAT){
+                    player.movingLeft = true;
+                } else {
+                    player.movingLeft = false;
+                }
+                break;
+            case GLFW_KEY_D:
+                if (action == GLFW_PRESS || action == GLFW_REPEAT){
+                    player.movingRight = true;
+                } else {
+                    player.movingRight = false;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    if (gameState == GAME_OVER) {
+        if (key == GLFW_KEY_SPACE) {
+            gameState = MAIN_MENU;
+        }
     }
 }
 
 void mouse_button_callback(GLFWwindow *window, int button, int action, int mods){
-    switch (button) {
-        case GLFW_MOUSE_BUTTON_LEFT:
-            if (action == GLFW_PRESS || action == GLFW_REPEAT) {
-                player.zapping = true;
-            } else  {
-                player.zapping = false;
-            }
-            break;
-        case GLFW_MOUSE_BUTTON_RIGHT:
-            if (action == GLFW_PRESS || action == GLFW_REPEAT) {
-                player.booming = true;
-            } else {
-                player.booming = false;
-            }
-            break;
-        default:
-            break;
+    if (gameState == MAIN_MENU) {
+        if (action == GLFW_PRESS) {
+            gameState = GAME_PLAYING;
+        }
+    }
+    if (gameState == GAME_PLAYING){
+        switch (button) {
+            case GLFW_MOUSE_BUTTON_LEFT:
+                if (action == GLFW_PRESS || action == GLFW_REPEAT) {
+                    player.zapping = true;
+                } else  {
+                    player.zapping = false;
+                }
+                break;
+            case GLFW_MOUSE_BUTTON_RIGHT:
+                if (action == GLFW_PRESS || action == GLFW_REPEAT) {
+                    player.booming = true;
+                } else {
+                    player.booming = false;
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
 

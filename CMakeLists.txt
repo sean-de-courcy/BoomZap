@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
-project(BoomZap_0.4)
+project(BoomZap_0-4)
 
 set(LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libraries")
 set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
-set(SOURCES "${SRC_DIR}/BoomZap.cpp")
+set(SOURCES "${SRC_DIR}/BoomZap.cpp" "${SRC_DIR}/glfwShapeObjects.h" "${SRC_DIR}/boomZapObjects.h")
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")

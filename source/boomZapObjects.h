@@ -38,8 +38,8 @@ public:
         if (body.color[2] > 1) { body.color[2] = rand() / (float) RAND_MAX; }
     }
 
-    void updatePos(void) {
-        body.updatePos();
+    void updatePos(float timeStep) {
+        body.updatePos(timeStep);
         if (body.pos[0] > 1 || body.pos[0] < -1) {
             body.pos[0] *= -1;
         }
@@ -96,10 +96,10 @@ public:
         int posOrNeg;
         float randFrac = rand() / (float) RAND_MAX;
         (randFrac >= 0.5 ? posOrNeg = 1 : posOrNeg = -1);
-        body.vel[0] = posOrNeg * (0.003 + rand() / (float) RAND_MAX / 100);
+        body.vel[0] = posOrNeg * (0.3 + rand() / (float) RAND_MAX);
         randFrac = rand() / (float) RAND_MAX;
         (randFrac >= 0.5 ? posOrNeg = 1 : posOrNeg = -1);
-        body.vel[1] = posOrNeg * (0.003 + rand() / (float) RAND_MAX / 100);
+        body.vel[1] = posOrNeg * (0.3 + rand() / (float) RAND_MAX);
     }
 
     void reInnit(Player &bob) {
@@ -115,21 +115,23 @@ public:
         int posOrNeg;
         float randFrac = rand() / (float) RAND_MAX;
         (randFrac >= 0.5 ? posOrNeg = 1 : posOrNeg = -1);
-        body.vel[0] = posOrNeg * (0.003 + rand() / (float) RAND_MAX / 100);
+        body.vel[0] = posOrNeg * (0.3 + rand() / (float) RAND_MAX);
         randFrac = rand() / (float) RAND_MAX;
         (randFrac >= 0.5 ? posOrNeg = 1 : posOrNeg = -1);
-        body.vel[1] = posOrNeg * (0.003 + rand() / (float) RAND_MAX / 100);
+        body.vel[1] = posOrNeg * (0.3 + rand() / (float) RAND_MAX);
         health = 2;
         bob.score += 1;
     }
 
-    void updatePos(void) {
-        body.updatePos();
+    void updatePos(float timeStep) {
+        body.updatePos(timeStep);
         if (body.pos[0] > 1 || body.pos[0] < -1) {
             body.pos[0] *= -1;
+            body.updatePos(timeStep);
         }
         if (body.pos[1] > 1 || body.pos[1] < -1) {
             body.pos[1] *= -1;
+            body.updatePos(timeStep);
         }
     }
 
@@ -137,7 +139,7 @@ public:
         if (pow(bob.body.pos[0] - body.pos[0], 2) + pow(bob.body.pos[1] - body.pos[1], 2) <=
             pow((bob.body.radius + body.radius), 2)) {
             reInnit(bob);
-            //bob.lives -= 1;
+            bob.lives -= 1;
         } else if (pow(bob.body.pos[0] - body.pos[0], 2) + pow(bob.body.pos[1] - body.pos[1], 2) <=
                    pow((0.25 + body.radius), 2) && bob.booming) {
             health = 1;
