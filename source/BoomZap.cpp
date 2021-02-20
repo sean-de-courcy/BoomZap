@@ -328,7 +328,6 @@ int main() {
             player.movingRight = false;
             player.booming = false;
             player.zapping = false;
-            player.score = 0;
             for (int i = 0; i < enemies.size() - 3; i++){
                 enemies.pop_back();
             }
@@ -344,6 +343,8 @@ int main() {
             RenderText(shader, scoreStr, static_cast<float>(WINDOW_WIDTH) / 2 - textPixelLength / 2, static_cast<float>(WINDOW_HEIGHT) / 2, scale, glm::vec3(1.0f, 1.0f, 1.0f));
             glUseProgram(0);
             
+            player.score = 0;
+
             std::string spaceToContinueStr = "Press [SPACE] to return to main menu.";
             scale = 1.0f * 1920 / WINDOW_WIDTH;
             textPixelLength = 0;
