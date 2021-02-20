@@ -6,7 +6,7 @@
 },
 {
   "directory": "/home/sean/Desktop/C++ Programs/BoomZap/build",
-  "command": "/usr/bin/c++   -I\"/home/sean/Desktop/C++ Programs/BoomZap/libraries/glad/include\"   -static-libgcc -static-libstdc++ -g   -std=gnu++11 -o CMakeFiles/BoomZap_0.4.dir/source/BoomZap.cpp.o -c \"/home/sean/Desktop/C++ Programs/BoomZap/source/BoomZap.cpp\"",
+  "command": "/usr/bin/c++   -I\"/home/sean/Desktop/C++ Programs/BoomZap/libraries/glad/include\"   -static-libgcc -static-libstdc++ -g   -std=gnu++11 -o CMakeFiles/BoomZap_0-4.dir/source/BoomZap.cpp.o -c \"/home/sean/Desktop/C++ Programs/BoomZap/source/BoomZap.cpp\"",
   "file": "/home/sean/Desktop/C++ Programs/BoomZap/source/BoomZap.cpp"
 }
 ]

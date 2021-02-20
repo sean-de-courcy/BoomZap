@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "BoomZap_0.4"
+			"path" : "BoomZap_0-4"
 		}
 	],
 	"backtrace" : 1,
@@ -76,7 +76,7 @@
 			"id" : "glad::@6890427a1f51a3e7e1df"
 		}
 	],
-	"id" : "BoomZap_0.4::@6890427a1f51a3e7e1df",
+	"id" : "BoomZap_0-4::@6890427a1f51a3e7e1df",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -121,8 +121,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "BoomZap_0.4",
-	"nameOnDisk" : "BoomZap_0.4",
+	"name" : "BoomZap_0-4",
+	"nameOnDisk" : "BoomZap_0-4",
 	"paths" : 
 	{
 		"build" : ".",

@@ -124,17 +124,17 @@ glad/fast:
 .PHONY : glad/fast
 
 #=============================================================================
-# Target rules for targets named BoomZap_0.4
+# Target rules for targets named BoomZap_0-4
 
 # Build rule for target.
-BoomZap_0.4: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 BoomZap_0.4
-.PHONY : BoomZap_0.4
+BoomZap_0-4: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 BoomZap_0-4
+.PHONY : BoomZap_0-4
 
 # fast build rule for target.
-BoomZap_0.4/fast:
-	$(MAKE) -f CMakeFiles/BoomZap_0.4.dir/build.make CMakeFiles/BoomZap_0.4.dir/build
-.PHONY : BoomZap_0.4/fast
+BoomZap_0-4/fast:
+	$(MAKE) -f CMakeFiles/BoomZap_0-4.dir/build.make CMakeFiles/BoomZap_0-4.dir/build
+.PHONY : BoomZap_0-4/fast
 
 libraries/glad/src/glad.o: libraries/glad/src/glad.c.o
 
@@ -169,7 +169,7 @@ source/BoomZap.o: source/BoomZap.cpp.o
 
 # target to build an object file
 source/BoomZap.cpp.o:
-	$(MAKE) -f CMakeFiles/BoomZap_0.4.dir/build.make CMakeFiles/BoomZap_0.4.dir/source/BoomZap.cpp.o
+	$(MAKE) -f CMakeFiles/BoomZap_0-4.dir/build.make CMakeFiles/BoomZap_0-4.dir/source/BoomZap.cpp.o
 .PHONY : source/BoomZap.cpp.o
 
 source/BoomZap.i: source/BoomZap.cpp.i
@@ -178,7 +178,7 @@ source/BoomZap.i: source/BoomZap.cpp.i
 
 # target to preprocess a source file
 source/BoomZap.cpp.i:
-	$(MAKE) -f CMakeFiles/BoomZap_0.4.dir/build.make CMakeFiles/BoomZap_0.4.dir/source/BoomZap.cpp.i
+	$(MAKE) -f CMakeFiles/BoomZap_0-4.dir/build.make CMakeFiles/BoomZap_0-4.dir/source/BoomZap.cpp.i
 .PHONY : source/BoomZap.cpp.i
 
 source/BoomZap.s: source/BoomZap.cpp.s
@@ -187,7 +187,7 @@ source/BoomZap.s: source/BoomZap.cpp.s
 
 # target to generate assembly for a file
 source/BoomZap.cpp.s:
-	$(MAKE) -f CMakeFiles/BoomZap_0.4.dir/build.make CMakeFiles/BoomZap_0.4.dir/source/BoomZap.cpp.s
+	$(MAKE) -f CMakeFiles/BoomZap_0-4.dir/build.make CMakeFiles/BoomZap_0-4.dir/source/BoomZap.cpp.s
 .PHONY : source/BoomZap.cpp.s
 
 # Help Target
@@ -197,9 +197,9 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... glad"
 	@echo "... edit_cache"
-	@echo "... BoomZap_0.4"
+	@echo "... glad"
+	@echo "... BoomZap_0-4"
 	@echo "... libraries/glad/src/glad.o"
 	@echo "... libraries/glad/src/glad.i"
 	@echo "... libraries/glad/src/glad.s"

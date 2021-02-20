@@ -2,6 +2,30 @@
 	"entries" : 
 	[
 		{
+			"name" : "BoomZap_0-4_BINARY_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Value Computed by CMake"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "/home/sean/Desktop/C++ Programs/BoomZap/build"
+		},
+		{
+			"name" : "BoomZap_0-4_SOURCE_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Value Computed by CMake"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "/home/sean/Desktop/C++ Programs/BoomZap"
+		},
+		{
 			"name" : "BoomZap_0.4_BINARY_DIR",
 			"properties" : 
 			[
@@ -863,7 +887,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "BoomZap_0.4"
+			"value" : "BoomZap_0-4"
 		},
 		{
 			"name" : "CMAKE_RANLIB",

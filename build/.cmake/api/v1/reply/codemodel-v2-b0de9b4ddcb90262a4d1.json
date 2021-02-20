@@ -27,7 +27,7 @@
 					[
 						0
 					],
-					"name" : "BoomZap_0.4",
+					"name" : "BoomZap_0-4",
 					"targetIndexes" : 
 					[
 						0,
@@ -39,9 +39,9 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "BoomZap_0.4::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-BoomZap_0.4-Debug-43e7cb0ff197694fe6c4.json",
-					"name" : "BoomZap_0.4",
+					"id" : "BoomZap_0-4::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-BoomZap_0-4-Debug-5865fed3bd4d8e47096b.json",
+					"name" : "BoomZap_0-4",
 					"projectIndex" : 0
 				},
 				{

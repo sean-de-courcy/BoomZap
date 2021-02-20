@@ -328,6 +328,7 @@ int main() {
             player.movingRight = false;
             player.booming = false;
             player.zapping = false;
+            player.score = 0;
             for (int i = 0; i < enemies.size() - 3; i++){
                 enemies.pop_back();
             }

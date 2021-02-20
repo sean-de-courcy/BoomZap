@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = "/home/sean/Desktop/C++ Programs/BoomZap/build"
 
 # The main recursive "all" target.
 all: CMakeFiles/glad.dir/all
-all: CMakeFiles/BoomZap_0.4.dir/all
+all: CMakeFiles/BoomZap_0-4.dir/all
 
 .PHONY : all
 
@@ -65,7 +65,7 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/glad.dir/clean
-clean: CMakeFiles/BoomZap_0.4.dir/clean
+clean: CMakeFiles/BoomZap_0-4.dir/clean
 
 .PHONY : clean
 
@@ -97,31 +97,31 @@ CMakeFiles/glad.dir/clean:
 .PHONY : CMakeFiles/glad.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/BoomZap_0.4.dir
+# Target rules for target CMakeFiles/BoomZap_0-4.dir
 
 # All Build rule for target.
-CMakeFiles/BoomZap_0.4.dir/all: CMakeFiles/glad.dir/all
-	$(MAKE) -f CMakeFiles/BoomZap_0.4.dir/build.make CMakeFiles/BoomZap_0.4.dir/depend
-	$(MAKE) -f CMakeFiles/BoomZap_0.4.dir/build.make CMakeFiles/BoomZap_0.4.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/sean/Desktop/C++ Programs/BoomZap/build/CMakeFiles" --progress-num=1,2 "Built target BoomZap_0.4"
-.PHONY : CMakeFiles/BoomZap_0.4.dir/all
+CMakeFiles/BoomZap_0-4.dir/all: CMakeFiles/glad.dir/all
+	$(MAKE) -f CMakeFiles/BoomZap_0-4.dir/build.make CMakeFiles/BoomZap_0-4.dir/depend
+	$(MAKE) -f CMakeFiles/BoomZap_0-4.dir/build.make CMakeFiles/BoomZap_0-4.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/sean/Desktop/C++ Programs/BoomZap/build/CMakeFiles" --progress-num=1,2 "Built target BoomZap_0-4"
+.PHONY : CMakeFiles/BoomZap_0-4.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/BoomZap_0.4.dir/rule: cmake_check_build_system
+CMakeFiles/BoomZap_0-4.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/sean/Desktop/C++ Programs/BoomZap/build/CMakeFiles" 4
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/BoomZap_0.4.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/BoomZap_0-4.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/sean/Desktop/C++ Programs/BoomZap/build/CMakeFiles" 0
-.PHONY : CMakeFiles/BoomZap_0.4.dir/rule
+.PHONY : CMakeFiles/BoomZap_0-4.dir/rule
 
 # Convenience name for target.
-BoomZap_0.4: CMakeFiles/BoomZap_0.4.dir/rule
+BoomZap_0-4: CMakeFiles/BoomZap_0-4.dir/rule
 
-.PHONY : BoomZap_0.4
+.PHONY : BoomZap_0-4
 
 # clean rule for target.
-CMakeFiles/BoomZap_0.4.dir/clean:
-	$(MAKE) -f CMakeFiles/BoomZap_0.4.dir/build.make CMakeFiles/BoomZap_0.4.dir/clean
-.PHONY : CMakeFiles/BoomZap_0.4.dir/clean
+CMakeFiles/BoomZap_0-4.dir/clean:
+	$(MAKE) -f CMakeFiles/BoomZap_0-4.dir/build.make CMakeFiles/BoomZap_0-4.dir/clean
+.PHONY : CMakeFiles/BoomZap_0-4.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
