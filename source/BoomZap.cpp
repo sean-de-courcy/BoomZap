@@ -204,6 +204,9 @@ int main() {
 
         //Main Menu
         if (gameState == MAIN_MENU) {
+            //For resetting
+            player.score = 0;
+
             //Game name text
             std::string GameName = "BoomZap 0.4 Alpha";
             float scale = 3.0f * 1920 / WINDOW_WIDTH;
@@ -343,8 +346,6 @@ int main() {
             RenderText(shader, scoreStr, static_cast<float>(WINDOW_WIDTH) / 2 - textPixelLength / 2, static_cast<float>(WINDOW_HEIGHT) / 2, scale, glm::vec3(1.0f, 1.0f, 1.0f));
             glUseProgram(0);
             
-            player.score = 0;
-
             std::string spaceToContinueStr = "Press [SPACE] to return to main menu.";
             scale = 1.0f * 1920 / WINDOW_WIDTH;
             textPixelLength = 0;
