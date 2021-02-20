@@ -10,13 +10,22 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <map>
+#include <math.h>
+#include <vector>
+
+#include "boomZapObjects.h"
 
 //Prototyping
+void mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
+static void cursor_position_callback(GLFWwindow *window, double xPos, double yPos);
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
+
 void get_resolution(int &windowwidth, int &windowheight);
 void installShaders();
 void RenderText(Shader &s, std::string text, float x, float y, float scale, glm::vec3 color);
 
 //Initializing
+const float PLAYER_SPEED = 0.01;
 int WINDOW_HEIGHT;
 int WINDOW_WIDTH;
 double dt = 0;
@@ -33,7 +42,14 @@ struct Character {
 };
 std::map<char, Character> Characters;
 
+//Initializing Game Objects
+Player player;
+std::vector<Enemy> enemies;
+
 int main() {
+    //Seeding
+    srand(time(NULL));
+
     //Initial Window Setup GLFW
     if (!glfwInit()) {
         exit(EXIT_FAILURE);
@@ -150,10 +166,23 @@ int main() {
     glfwSetCursor(window, cursor);
     double xpos = 0, ypos = 0;
     
+    //Setting Callbacks
+    glfwSetKeyCallback(window, key_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+
+    //Initializing Objects
+    for (int i = 0; i < 3; i++) {
+        Enemy enemy(player);
+        enemies.push_back(enemy);
+    }
+    glfwCircle lifeCircle1(0.02, -.9, -.9, 0, 1, 0, 0, 0);
+    glfwCircle lifeCircle2(0.02, -.84, -.9, 0, 1, 0, 0, 0);
+    glfwCircle lifeCircle3(0.02, -.78, -.9, 0, 1, 0, 0, 0);
+
     //Run-Loop
     while (!glfwWindowShouldClose(window)) {
         //Keeping track of time
-        auto start = clock();
+        //auto start = clock();
 
         //Setup View
         float ratio;
@@ -163,40 +192,168 @@ int main() {
         glViewport(0, 0, width, height);
         //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        
-        // //Drawing
-        // const float DEG2RAD = 3.14159 / 180;
-        // if (t > 5) {
-        //     glColor3f(0, 1, 0);
-        // } else {
-        //     glColor3f(1, 0, 0);
-        // }
-        // glBegin(GL_POLYGON);
-        //     for (int i = 0; i < 360; i++) {
-        //         float degInRad = i*DEG2RAD;
-        //         glVertex2f((cos(degInRad)*1 + 0) / ratio, sin(degInRad)*1 + 0);
-        //     }
-        // glEnd();
+
+        //Handle User Input Main Menu
+        glfwGetCursorPos(window, &xpos, &ypos);
 
         //Text
-        RenderText(shader, "BoomZap", 0, 0, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+        std::string GameName = "BoomZap";
+        float scale = 4.0f * 1920 / WINDOW_WIDTH;
+        float textPixelLength = 0;
+        std::string::const_iterator c;
+        for (c = GameName.begin(); c != GameName.end(); c++) {
+            Character ch = Characters[*c];
+            textPixelLength += (ch.Advance >> 6) * scale;
+        }
+        RenderText(shader, GameName, static_cast<float>(WINDOW_WIDTH) / 2 - textPixelLength / 2, static_cast<float>(WINDOW_HEIGHT) * 3/5, scale, glm::vec3(1.0f, 1.0f, 1.0f));
         
+        //Handle User Input Gameplay
+        xpos = (xpos*2/width - 1) * ratio;
+        ypos = -1*(ypos*2/height) + 1;
+
+        //Update Velocities
+        if (player.movingUp && !player.movingDown && !(player.movingLeft ^ player.movingRight)) {
+            player.body.vel[1] = PLAYER_SPEED;
+            player.body.vel[0] = 0;
+        } else if (player.movingDown && !player.movingUp && !(player.movingLeft ^ player.movingRight)) {
+            player.body.vel[1] = -1*PLAYER_SPEED;
+            player.body.vel[0] = 0;
+        } else if (player.movingLeft && !player.movingRight && !(player.movingUp ^ player.movingDown)) {
+            player.body.vel[0] = -1*PLAYER_SPEED;
+            player.body.vel[1] = 0;
+        } else if (player.movingRight && !player.movingLeft && !(player.movingUp ^ player.movingDown)) {
+            player.body.vel[0] = PLAYER_SPEED;
+            player.body.vel[1] = 0;
+        } else if (player.movingUp && player.movingRight && !(player.movingDown || player.movingLeft)) {
+            player.body.vel[0] = sqrt(pow(PLAYER_SPEED, 2) / 2);
+            player.body.vel[1] = sqrt(pow(PLAYER_SPEED, 2) / 2);
+        } else if (player.movingUp && player.movingLeft && !(player.movingDown || player.movingRight)) {
+            player.body.vel[0] = -1 * sqrt(pow(PLAYER_SPEED, 2) / 2);
+            player.body.vel[1] = sqrt(pow(PLAYER_SPEED, 2) / 2);
+        } else if (player.movingDown && player.movingRight && !(player.movingUp || player.movingLeft)) {
+            player.body.vel[0] = sqrt(pow(PLAYER_SPEED, 2) / 2);
+            player.body.vel[1] = -1 * sqrt(pow(PLAYER_SPEED, 2) / 2);
+        } else if (player.movingDown && player.movingLeft && !(player.movingUp || player.movingRight)) {
+            player.body.vel[0] = -1*sqrt(pow(PLAYER_SPEED, 2) / 2);
+            player.body.vel[1] = -1*sqrt(pow(PLAYER_SPEED, 2) / 2);
+        } else {
+            player.body.vel[0] = 0;
+            player.body.vel[1] = 0;
+        }
+
+        //Update Positions
+        player.updatePos();
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies[i].updatePos();
+        }
+
+        //Collision Detection
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies[i].detectCollision(player, xpos, ypos, ratio);
+        }
+
+        //Update Colors
+        player.updateColor();
+
+        //Draw
+        player.draw(xpos, ypos, ratio);
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies[i].draw(ratio);
+        }
+        if (player.lives >= 1) {
+            lifeCircle1.draw(ratio);
+        }
+        if (player.lives >= 2) {
+            lifeCircle2.draw(ratio);
+        }
+        if (player.lives == 3) {
+            lifeCircle3.draw(ratio);
+        }
+        if (player.lives <= 0) {
+            break;
+        }
+
+        //Create more Enemies
+        if (enemies.size() < 3 + player.score / 10) {
+            Enemy enemy(player);
+            enemies.push_back(enemy);
+        }
+
         //Swap Buffer and Poll Events
         glfwSwapBuffers(window);
         glfwPollEvents();
 
         //Keeping track of time
-        auto end = clock();
-        dt = difftime(end, start) / CLOCKS_PER_SEC;
-        t += dt;
+        // auto end = clock();
+        // dt = difftime(end, start) / CLOCKS_PER_SEC;
+        // t += dt;
     }
     
+    //Print Score to Console
+    std::cout << "You scored " + std::to_string(player.score) + " points." << std::endl;
+
     //Close Window
     glfwTerminate();
     exit(EXIT_SUCCESS);
 }
 
 //Defining
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods){
+    switch (key) {
+        case GLFW_KEY_W:
+            if (action == GLFW_REPEAT || action == GLFW_PRESS) {
+                player.movingUp = true;
+            } else {
+                player.movingUp = false;
+            }
+            break;
+        case GLFW_KEY_S:
+            if (action == GLFW_PRESS || action == GLFW_REPEAT){
+                player.movingDown = true;
+            } else {
+                player.movingDown = false;
+            }
+            break;
+        case GLFW_KEY_A:
+            if (action == GLFW_PRESS || action == GLFW_REPEAT){
+                player.movingLeft = true;
+            } else {
+                player.movingLeft = false;
+            }
+            break;
+        case GLFW_KEY_D:
+            if (action == GLFW_PRESS || action == GLFW_REPEAT){
+                player.movingRight = true;
+            } else {
+                player.movingRight = false;
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+void mouse_button_callback(GLFWwindow *window, int button, int action, int mods){
+    switch (button) {
+        case GLFW_MOUSE_BUTTON_LEFT:
+            if (action == GLFW_PRESS || action == GLFW_REPEAT) {
+                player.zapping = true;
+            } else  {
+                player.zapping = false;
+            }
+            break;
+        case GLFW_MOUSE_BUTTON_RIGHT:
+            if (action == GLFW_PRESS || action == GLFW_REPEAT) {
+                player.booming = true;
+            } else {
+                player.booming = false;
+            }
+            break;
+        default:
+            break;
+    }
+}
+
 void get_resolution(int &windowwidth, int &windowheight) {
     const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
