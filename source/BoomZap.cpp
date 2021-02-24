@@ -96,7 +96,7 @@ int main() {
     if (error_check != FT_Err_Ok) {
         std::cout << "An error occured during freetype library initialization." << std::endl;
     }
-    error_check = FT_New_Face (library, "/home/sean/Documents/Fonts/Poppins/Poppins-Regular.ttf", 0, &face);
+    error_check = FT_New_Face (library, "Poppins-Regular.ttf", 0, &face);
     if (error_check != FT_Err_Ok) {
         std::cout << "An error occured during freetype face initialization." << std::endl;
         if (error_check == FT_Err_Unknown_File_Format) {

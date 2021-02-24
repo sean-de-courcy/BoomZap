@@ -81,26 +81,9 @@ class Enemy {
 private:
     glfwCircle body;
 public:
-    int health = 2;
+    int health;
 
-    Enemy(Player &bob) {
-        do {
-            body.radius = .08 + (rand() / (float) RAND_MAX / 50);
-            body.pos[0] = rand() / (float) RAND_MAX * 2 - 1;
-            body.pos[1] = rand() / (float) RAND_MAX * 2 - 1;
-        } while (pow(bob.body.pos[0] - body.pos[0], 2) + pow(bob.body.pos[1] - body.pos[1], 2) <=
-                 pow((bob.body.radius + body.radius) * 3, 2));
-        body.color[0] = 0.4;
-        body.color[1] = 0.4;
-        body.color[2] = 0.4;
-        int posOrNeg;
-        float randFrac = rand() / (float) RAND_MAX;
-        (randFrac >= 0.5 ? posOrNeg = 1 : posOrNeg = -1);
-        body.vel[0] = (posOrNeg * (0.3 + rand() / (float) RAND_MAX))*0.7;
-        randFrac = rand() / (float) RAND_MAX;
-        (randFrac >= 0.5 ? posOrNeg = 1 : posOrNeg = -1);
-        body.vel[1] = (posOrNeg * (0.3 + rand() / (float) RAND_MAX))*0.7;
-    }
+    Enemy(Player &bob);
 
     void reInnit(Player &bob) {
         do {
@@ -163,5 +146,10 @@ public:
         body.draw(ratio);
     }
 };
+
+Enemy::Enemy(Player &bob) {
+    reInnit(bob);
+    bob.score -= 1;
+}
 
 #endif //BOOMZAP_BOOMZAPOBJECTS_H
