@@ -1,5 +1,5 @@
 //
-// Created by seane on 2/14/2021.
+// Created by Sean Coursey on 2/14/2021.
 //
 
 #ifndef GLFWSHAPEOBJECTS_H

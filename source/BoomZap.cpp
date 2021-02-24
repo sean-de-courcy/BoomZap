@@ -274,7 +274,7 @@ int main() {
 
                 //Collision Detection
                 for (int i = 0; i < enemies.size(); i++) {
-                    enemies[i].detectCollision(player, xpos, ypos, ratio);
+                    enemies[i].detectCollision(player, xpos, ypos, ratio, dt);
                 }
 
                 //Update Colors

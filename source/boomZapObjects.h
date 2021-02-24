@@ -1,5 +1,5 @@
 //
-// Created by Enderhawk451 on 2/14/2021.
+// Created by Sean Coursey on 2/14/2021.
 //
 
 #ifndef BOOMZAP_BOOMZAPOBJECTS_H
@@ -7,6 +7,15 @@
 
 #include "glfwShapeObjects.h"
 
+//Helper Functions
+int randPosOrNeg() {
+    int i = 0;
+    float randFrac = rand() / (float) RAND_MAX;
+    (randFrac >= 0.5 ? i = 1 : i = -1);
+    return i;
+}
+
+//Defining Player Class
 class Player {
 public:
     glfwCircle body;
@@ -77,35 +86,47 @@ public:
     }
 };
 
+//Defining Enemy Class
 class Enemy {
 private:
     glfwCircle body;
+    
 public:
     int health;
 
+    //Prototyping Initializer
     Enemy(Player &bob);
 
+    //Re-initialize the enemy after being destroyed
     void reInnit(Player &bob) {
+
+        /* Make sure the enemy doesn't spawn too close to the player */
         do {
             body.radius = .08 + (rand() / (float) RAND_MAX / 30);
             body.pos[0] = rand() / (float) RAND_MAX * 2 - 1;
             body.pos[1] = rand() / (float) RAND_MAX * 2 - 1;
         } while (pow(bob.body.pos[0] - body.pos[0], 2) + pow(bob.body.pos[1] - body.pos[1], 2) <=
                  pow((bob.body.radius + body.radius) * 3, 2));
+
+        /* Initialize color to grey */
         body.color[0] = 0.4;
         body.color[1] = 0.4;
         body.color[2] = 0.4;
-        int posOrNeg;
-        float randFrac = rand() / (float) RAND_MAX;
-        (randFrac >= 0.5 ? posOrNeg = 1 : posOrNeg = -1);
+
+        /* Intialize velocity to a random velocity, min = 0.21, max = 0.91 */
+        int posOrNeg = randPosOrNeg();
         body.vel[0] = (posOrNeg * (0.3 + rand() / (float) RAND_MAX))*0.7;
-        randFrac = rand() / (float) RAND_MAX;
-        (randFrac >= 0.5 ? posOrNeg = 1 : posOrNeg = -1);
+        posOrNeg = randPosOrNeg();
         body.vel[1] = (posOrNeg * (0.3 + rand() / (float) RAND_MAX))*0.7;
+
+        /* Reset health */
         health = 2;
+
+        /* Add to player score */
         bob.score += 1;
     }
 
+    //Update Position
     void updatePos(float timeStep) {
         body.updatePos(timeStep);
         if (body.pos[0] > 1 || body.pos[0] < -1) {
@@ -118,7 +139,7 @@ public:
         }
     }
 
-    void detectCollision(Player &bob, double cursorX, double cursorY, float ratio) {
+    void detectCollision(Player &bob, double cursorX, double cursorY, float ratio, float timeStep) {
         if (pow(bob.body.pos[0] - body.pos[0], 2) + pow(bob.body.pos[1] - body.pos[1], 2) <=
             pow((bob.body.radius + body.radius), 2)) {
             reInnit(bob);
@@ -129,13 +150,10 @@ public:
             body.color[0] = 1;
             body.color[1] = 0.5;
             body.color[2] = 0.6;
-            int posOrNeg;
-            float randFrac = rand() / (float) RAND_MAX;
-            (randFrac >= 0.5 ? posOrNeg = 1 : posOrNeg = -1);
-            body.vel[0] += posOrNeg * rand() / (float) RAND_MAX / 100;
-            randFrac = rand() / (float) RAND_MAX;
-            (randFrac >= 0.5 ? posOrNeg = 1 : posOrNeg = -1);
-            body.vel[1] += posOrNeg * rand() / (float) RAND_MAX / 100;
+            int posOrNeg = randPosOrNeg();
+            body.vel[0] += posOrNeg * rand() / (float) RAND_MAX * 20 * timeStep;
+            posOrNeg = randPosOrNeg();
+            body.vel[1] += posOrNeg * rand() / (float) RAND_MAX * 20 * timeStep;
         } else if (bob.zapping && pow(cursorX - body.pos[0], 2) + pow(cursorY - body.pos[1], 2) <=
                                   pow(body.radius, 2) && health == 1) {
             reInnit(bob);
@@ -147,7 +165,7 @@ public:
     }
 };
 
-Enemy::Enemy(Player &bob) {
+Enemy::Enemy(Player &bob) { //Defining Initializer
     reInnit(bob);
     bob.score -= 1;
 }
