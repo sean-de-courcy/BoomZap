@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(BoomZap_0-4)
+project(BoomZap_0-5)
 
 set(LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libraries")
 set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")

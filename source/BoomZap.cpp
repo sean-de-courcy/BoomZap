@@ -208,7 +208,7 @@ int main() {
             player.score = 0;
 
             //Game name text
-            std::string GameName = "BoomZap 0.4 Alpha";
+            std::string GameName = "BoomZap 0.5 Alpha";
             float scale = 3.0f * 1920 / WINDOW_WIDTH;
             float textPixelLength = 0;
             std::string::const_iterator c;
