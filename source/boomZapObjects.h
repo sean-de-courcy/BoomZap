@@ -71,11 +71,13 @@ public:
 
     //Draw Player Body and Effects
     void draw(double cursorX, double cursorY, float ratio) {
+
         /* if the player is right clicking */
         if (booming) {
             /* draw a red circle radius 0.25 centered on the player */
             glfwCircle boomOuter(0.25, body.pos[0], body.pos[1], .6, .2, 0);
             boomOuter.draw(ratio);
+
             /* draw a yellow circle radius 0.175 centered on the player */
             glfwCircle boomInner(0.175, body.pos[0], body.pos[1], .5, .5, 0);
             boomInner.draw(ratio);
@@ -89,6 +91,7 @@ public:
                 glVertex2f(cursorX / ratio, cursorY);
             glEnd();
         }
+
         body.draw(ratio); // self explanatory
 
         /* if the window is not square */
