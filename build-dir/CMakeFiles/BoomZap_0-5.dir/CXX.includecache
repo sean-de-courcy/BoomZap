@@ -1,0 +1,68 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../libraries/glad/include/KHR/khrplatform.h
+stdint.h
+-
+inttypes.h
+-
+stdint.h
+-
+
+../libraries/glad/include/glad/glad.h
+KHR/khrplatform.h
+-
+
+/home/sean/Desktop/C++ Programs/BoomZap/source/BoomZap.cpp
+shader.h
+/home/sean/Desktop/C++ Programs/BoomZap/source/shader.h
+GLFW/glfw3.h
+-
+ft2build.h
+-
+math.h
+-
+stdlib.h
+-
+cstring
+-
+ctime
+-
+glm/glm.hpp
+-
+glm/gtc/matrix_transform.hpp
+-
+glm/gtc/type_ptr.hpp
+-
+map
+-
+vector
+-
+boomZapObjects.h
+/home/sean/Desktop/C++ Programs/BoomZap/source/boomZapObjects.h
+
+/home/sean/Desktop/C++ Programs/BoomZap/source/boomZapObjects.h
+glfwShapeObjects.h
+/home/sean/Desktop/C++ Programs/BoomZap/source/glfwShapeObjects.h
+
+/home/sean/Desktop/C++ Programs/BoomZap/source/glfwShapeObjects.h
+
+/home/sean/Desktop/C++ Programs/BoomZap/source/shader.h
+glad/glad.h
+-
+glm/glm.hpp
+-
+string
+-
+fstream
+-
+sstream
+-
+iostream
+-
+
