@@ -11,3 +11,5 @@ to get everything necessary for cross-compiling it on here in the vaguely near f
 I'll also cross-compile it for Mac at some point.
 
 Feel free to use any of the ideas or code for BoomZap; just credit me if you do!
+
+SEIZURE WARNING: This game involves flashing lights.
